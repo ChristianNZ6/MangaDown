@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MyMangasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Capitulos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Manga" Type="int" Nullable="false" />
+          <Property Name="NumberOfPages" Type="int" Nullable="false" />
+          <Property Name="NameCap" Type="nchar" MaxLength="60" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Genres" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mangas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameManga" Type="nchar" MaxLength="80" Nullable="false" />
+          <Property Name="NumberOfCaps" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Paginas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Cap" Type="int" Nullable="false" />
+          <Property Name="NumberPage" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="BinaryImage" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RelationMangaGenero">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Manga" Type="int" Nullable="false" />
+          <Property Name="ID_Genero" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Capitulos_Mangas">
+          <End Role="Mangas" Type="Self.Mangas" Multiplicity="1" />
+          <End Role="Capitulos" Type="Self.Capitulos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mangas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Capitulos">
+              <PropertyRef Name="ID_Manga" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Paginas_Capitulos">
+          <End Role="Capitulos" Type="Self.Capitulos" Multiplicity="1" />
+          <End Role="Paginas" Type="Self.Paginas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capitulos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Paginas">
+              <PropertyRef Name="ID_Cap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelationMangaGenero_Generos">
+          <End Role="Generos" Type="Self.Generos" Multiplicity="1" />
+          <End Role="RelationMangaGenero" Type="Self.RelationMangaGenero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RelationMangaGenero">
+              <PropertyRef Name="ID_Genero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelationMangaGenero_Mangas">
+          <End Role="Mangas" Type="Self.Mangas" Multiplicity="1" />
+          <End Role="RelationMangaGenero" Type="Self.RelationMangaGenero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mangas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RelationMangaGenero">
+              <PropertyRef Name="ID_Manga" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MyMangasModelStoreContainer">
+          <EntitySet Name="Capitulos" EntityType="Self.Capitulos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mangas" EntityType="Self.Mangas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Paginas" EntityType="Self.Paginas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RelationMangaGenero" EntityType="Self.RelationMangaGenero" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Capitulos_Mangas" Association="Self.FK_Capitulos_Mangas">
+            <End Role="Mangas" EntitySet="Mangas" />
+            <End Role="Capitulos" EntitySet="Capitulos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Paginas_Capitulos" Association="Self.FK_Paginas_Capitulos">
+            <End Role="Capitulos" EntitySet="Capitulos" />
+            <End Role="Paginas" EntitySet="Paginas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelationMangaGenero_Generos" Association="Self.FK_RelationMangaGenero_Generos">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="RelationMangaGenero" EntitySet="RelationMangaGenero" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelationMangaGenero_Mangas" Association="Self.FK_RelationMangaGenero_Mangas">
+            <End Role="Mangas" EntitySet="Mangas" />
+            <End Role="RelationMangaGenero" EntitySet="RelationMangaGenero" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MyMangasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Capitulos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID_Manga" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfPages" Type="Int32" Nullable="false" />
+          <Property Name="NameCap" Type="String" MaxLength="60" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Paginas" Relationship="Self.FK_Paginas_Capitulos" FromRole="Capitulos" ToRole="Paginas" />
+          <NavigationProperty Name="Mangas" Relationship="MyMangasModel.FK_Capitulos_Mangas" FromRole="Capitulos" ToRole="Mangas" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Genres" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="RelationMangaGenero" Relationship="MyMangasModel.FK_RelationMangaGenero_Generos" FromRole="Generos" ToRole="RelationMangaGenero" />
+        </EntityType>
+        <EntityType Name="Paginas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID_Cap" Type="Int32" Nullable="false" />
+          <Property Name="NumberPage" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="BinaryImage" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Capitulos" Relationship="Self.FK_Paginas_Capitulos" FromRole="Paginas" ToRole="Capitulos" />
+        </EntityType>
+        <Association Name="FK_Paginas_Capitulos">
+          <End Role="Capitulos" Type="Self.Capitulos" Multiplicity="1" />
+          <End Role="Paginas" Type="Self.Paginas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capitulos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Paginas">
+              <PropertyRef Name="ID_Cap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MyMangasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Capitulos" EntityType="Self.Capitulos" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" />
+          <EntitySet Name="Paginas" EntityType="Self.Paginas" />
+          <AssociationSet Name="FK_Paginas_Capitulos" Association="Self.FK_Paginas_Capitulos">
+            <End Role="Capitulos" EntitySet="Capitulos" />
+            <End Role="Paginas" EntitySet="Paginas" />
+          </AssociationSet>
+          <EntitySet Name="RelationMangaGenero" EntityType="MyMangasModel.RelationMangaGenero" />
+          <AssociationSet Name="FK_RelationMangaGenero_Generos" Association="MyMangasModel.FK_RelationMangaGenero_Generos">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="RelationMangaGenero" EntitySet="RelationMangaGenero" />
+          </AssociationSet>
+          <EntitySet Name="Mangas" EntityType="MyMangasModel.Mangas" />
+          <AssociationSet Name="FK_Capitulos_Mangas" Association="MyMangasModel.FK_Capitulos_Mangas">
+            <End Role="Mangas" EntitySet="Mangas" />
+            <End Role="Capitulos" EntitySet="Capitulos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelationMangaGenero_Mangas" Association="MyMangasModel.FK_RelationMangaGenero_Mangas">
+            <End Role="Mangas" EntitySet="Mangas" />
+            <End Role="RelationMangaGenero" EntitySet="RelationMangaGenero" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="RelationMangaGenero">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID_Manga" Type="Int32" Nullable="false" />
+          <Property Name="ID_Genero" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Generos" Relationship="MyMangasModel.FK_RelationMangaGenero_Generos" FromRole="RelationMangaGenero" ToRole="Generos" />
+          <NavigationProperty Name="Mangas" Relationship="MyMangasModel.FK_RelationMangaGenero_Mangas" FromRole="RelationMangaGenero" ToRole="Mangas" />
+        </EntityType>
+        <Association Name="FK_RelationMangaGenero_Generos">
+          <End Type="MyMangasModel.Generos" Role="Generos" Multiplicity="1" />
+          <End Type="MyMangasModel.RelationMangaGenero" Role="RelationMangaGenero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RelationMangaGenero">
+              <PropertyRef Name="ID_Genero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Mangas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameManga" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="true" />
+          <Property Name="NumberOfCaps" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Capitulos" Relationship="MyMangasModel.FK_Capitulos_Mangas" FromRole="Mangas" ToRole="Capitulos" />
+          <NavigationProperty Name="RelationMangaGenero" Relationship="MyMangasModel.FK_RelationMangaGenero_Mangas" FromRole="Mangas" ToRole="RelationMangaGenero" />
+        </EntityType>
+        <Association Name="FK_Capitulos_Mangas">
+          <End Type="MyMangasModel.Mangas" Role="Mangas" Multiplicity="1" />
+          <End Type="MyMangasModel.Capitulos" Role="Capitulos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mangas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Capitulos">
+              <PropertyRef Name="ID_Manga" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelationMangaGenero_Mangas">
+          <End Type="MyMangasModel.Mangas" Role="Mangas" Multiplicity="1" />
+          <End Type="MyMangasModel.RelationMangaGenero" Role="RelationMangaGenero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mangas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RelationMangaGenero">
+              <PropertyRef Name="ID_Manga" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MyMangasModelStoreContainer" CdmEntityContainer="MyMangasEntities">
+          <EntitySetMapping Name="Capitulos">
+            <EntityTypeMapping TypeName="MyMangasModel.Capitulos">
+              <MappingFragment StoreEntitySet="Capitulos">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Manga" ColumnName="ID_Manga" />
+                <ScalarProperty Name="NumberOfPages" ColumnName="NumberOfPages" />
+                <ScalarProperty Name="NameCap" ColumnName="NameCap" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Generos">
+            <EntityTypeMapping TypeName="MyMangasModel.Generos">
+              <MappingFragment StoreEntitySet="Generos">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Genres" ColumnName="Genres" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Paginas">
+            <EntityTypeMapping TypeName="MyMangasModel.Paginas">
+              <MappingFragment StoreEntitySet="Paginas">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Cap" ColumnName="ID_Cap" />
+                <ScalarProperty Name="NumberPage" ColumnName="NumberPage" />
+                <ScalarProperty Name="BinaryImage" ColumnName="BinaryImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RelationMangaGenero">
+            <EntityTypeMapping TypeName="MyMangasModel.RelationMangaGenero">
+              <MappingFragment StoreEntitySet="RelationMangaGenero">
+                <ScalarProperty Name="ID_Genero" ColumnName="ID_Genero" />
+                <ScalarProperty Name="ID_Manga" ColumnName="ID_Manga" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mangas">
+            <EntityTypeMapping TypeName="MyMangasModel.Mangas">
+              <MappingFragment StoreEntitySet="Mangas">
+                <ScalarProperty Name="NumberOfCaps" ColumnName="NumberOfCaps" />
+                <ScalarProperty Name="NameManga" ColumnName="NameManga" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
