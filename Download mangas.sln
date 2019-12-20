@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Download mangas", "Download
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangasScraper", "MangasScraper\MangasScraper.csproj", "{7811A189-78E3-4955-9C60-1DE5B1B9F519}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScrap_Union", "WebScrap_Union\WebScrap_Union.csproj", "{A8ECFE38-9B05-4C0A-88A4-50E2C55D33D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7811A189-78E3-4955-9C60-1DE5B1B9F519}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7811A189-78E3-4955-9C60-1DE5B1B9F519}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7811A189-78E3-4955-9C60-1DE5B1B9F519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8ECFE38-9B05-4C0A-88A4-50E2C55D33D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8ECFE38-9B05-4C0A-88A4-50E2C55D33D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8ECFE38-9B05-4C0A-88A4-50E2C55D33D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8ECFE38-9B05-4C0A-88A4-50E2C55D33D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
