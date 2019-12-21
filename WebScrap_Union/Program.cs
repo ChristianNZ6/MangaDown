@@ -1,28 +1,37 @@
 ﻿using HtmlAgilityPack;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Win32.SafeHandles;
 using Nancy.Json;
 using Newtonsoft.Json;
 using ScrapySharp.Extensions;
 using ScrapySharp.Network;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace WebScrap_Union
 {
-    class Program
+  public  class Program
     {
         static void Main(string[] args)
         {
+            return;
+       }
+
+        public static void DownManga(string nameManga)
+        {
+
             var browser = new ScrapingBrowser();
 
             browser.IgnoreCookies = true;
 
 
-            var json = browser.NavigateToPage(new Uri("https://unionleitor.top/assets/busca.php?q=" + "spy"), HttpVerb.Get).Content;
+            var json = browser.NavigateToPage(new Uri("https://unionleitor.top/assets/busca.php?q=" + nameManga), HttpVerb.Get).Content;
 
             JavaScriptSerializer ser = new JavaScriptSerializer();
 
@@ -45,24 +54,37 @@ namespace WebScrap_Union
             List<string> nameCaps;
 
 
-            nameCaps = hdoc.DocumentNode.SelectNodes(capXpath).ToArray().OrderBy(x => x.InnerText).Select(x => x.InnerText).ToList();
+            nameCaps = hdoc.DocumentNode.SelectNodes(capXpath).ToArray().Select(x => x.InnerText).ToList();
+
+
+           nameCaps.Reverse();
+            CustomComparer customComparer = new CustomComparer();
 
 
 
-            var caps = hdoc.DocumentNode.SelectNodes(capXpath).Select(node => node.GetAttributeValue("href")).ToArray();
+            var caps = hdoc.DocumentNode.SelectNodes(capXpath).ToArray().Select(node => node.GetAttributeValue("href")).ToList(); ;
+
+            //Collections.reverse(caps);
+
+            caps.Reverse();
 
 
-            foreach (var cap in caps)
+            var nameCapsAndcaps = nameCaps.Zip(caps, (nc, c) => new { nameCaps = nc, caps = c });
+
+            foreach (var cap in nameCapsAndcaps)
             {
-                string[] pages = { };
+                List<string> pages;
 
-                var pagesPage = browser.NavigateToPage(new Uri(cap), HttpVerb.Get);
+                var pagesPage = browser.NavigateToPage(new Uri(cap.caps), HttpVerb.Get);
                 hdoc.LoadHtml(pagesPage.Html.InnerHtml);
                 string pagesXpath = "//*[@id='leitor']/div[4]/div[4]/img";
 
                 try
                 {
-                    pages = hdoc.DocumentNode.SelectNodes(pagesXpath).Select(node => node.GetAttributeValue("src")).ToArray();
+                    pages = hdoc.DocumentNode.SelectNodes(pagesXpath).ToArray().Select(node => node.GetAttributeValue("src")).ToList();
+
+                    pages.RemoveAll(u => u.Contains("banner"));
+                    
                 }
                 catch (Exception)
                 {
@@ -78,23 +100,44 @@ namespace WebScrap_Union
 
                     bytes = GetImg(page);
 
-                    var base64 = Convert.ToBase64String(bytes);
+                    //var base64 = Convert.ToBase64String(bytes);
 
                     listbyte.Add(bytes);
 
 
                 }
 
-                
+
 
                 MemoryStream ms = ToPDF(listbyte);
                 Spire.Pdf.PdfDocument doc = new Spire.Pdf.PdfDocument();
                 doc.LoadFromStream(ms);
-                doc.SaveToFile("C:\\1\\output.pdf");
+                
+                var pathFile = "C:\\1\\" + namemaga + " " + cap.nameCaps + ".pdf";
+                var fileName = namemaga + " " + cap.nameCaps;
+                doc.SaveToFile(pathFile);
+
+
+
+                //FileStream fileStream = new FileStream("C:\\1\\" + namemaga + " " + cap.nameCaps + ".pdf", FileMode.Open, FileAccess.Read);
+
+                try
+                {
+                    EmailEnvio.Program.SendEmaail(pathFile, fileName);
+
+                }
+                catch (Exception)
+                {
+                    continue;
+                 
+                }
+
+
+                //MemoryStream.CopyTo(fileStream);
+
+
 
             }
-
-
 
         }
         public class JsonDTO
@@ -200,21 +243,27 @@ namespace WebScrap_Union
                 throw;
             }
         }
-        //public static string SaveIntoPDf(Byte base64)
-        //{
 
+        public class CustomComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                var regex = new Regex("^(d+)");
 
+                // run the regex on both strings
+                var xRegexResult = regex.Match(x);
+                var yRegexResult = regex.Match(y);
 
-        //    byte[] pdfBytes;
-        //    System.IO.FileStream stream = new FileStream(@"C:\file.pdf", FileMode.CreateNew);
-        //    System.IO.BinaryWriter writer = new BinaryWriter(stream);
-        //    writer.Write(bytes, 0, bytes.Length);
-        //    writer.Close();
+                // check if they are both numbers
+                if (xRegexResult.Success && yRegexResult.Success)
+                {
+                    return int.Parse(xRegexResult.Groups[1].Value).CompareTo(int.Parse(yRegexResult.Groups[1].Value));
+                }
 
-
-        //    File.WriteAllBytes(@"C:\testpdf.pdf", pdfBytes);
-        //}
-
+                // otherwise return as string comparison
+                return x.CompareTo(y);
+            }
+        }
 
 
     }
