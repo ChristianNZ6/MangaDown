@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using WebScrap_Union;
 
 namespace Trigger
@@ -7,15 +8,24 @@ namespace Trigger
     {
         static void Main(string[] args)
         {
-			try
+
+			var mansgas = File.ReadAllLines(@"C:\Users\chris\Desktop\mangasReader.txt");
+
+
+			foreach (var manga in mansgas)
 			{
-				WebScrap_Union.Program.DownManga("Kimetsu no yaiba");
+				try
+				{
+					WebScrap_Union.Program.DownManga(manga);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+					throw;
+				}
 			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-				throw;
-			}
+
+			
         }
     }
 }

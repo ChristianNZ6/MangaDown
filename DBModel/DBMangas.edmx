@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MangasDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Caps">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Manga" Type="int" Nullable="false" />
+          <Property Name="NumberCap" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SendToKindle" Type="bit" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Mangas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameManga" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NumberCaps" Type="nchar" MaxLength="10" />
+          <Property Name="DateLastUpdate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Caps_Mangas">
+          <End Role="Mangas" Type="Self.Mangas" Multiplicity="1" />
+          <End Role="Caps" Type="Self.Caps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mangas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Caps">
+              <PropertyRef Name="ID_Manga" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MangasDBModelStoreContainer">
+          <EntitySet Name="Caps" EntityType="Self.Caps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mangas" EntityType="Self.Mangas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Caps_Mangas" Association="Self.FK_Caps_Mangas">
+            <End Role="Mangas" EntitySet="Mangas" />
+            <End Role="Caps" EntitySet="Caps" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MangasDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Caps">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID_Manga" Type="Int32" Nullable="false" />
+          <Property Name="NumberCap" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SendToKindle" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Mangas" Relationship="Self.FK_Caps_Mangas" FromRole="Caps" ToRole="Mangas" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Mangas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NameManga" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumberCaps" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DateLastUpdate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Caps" Relationship="Self.FK_Caps_Mangas" FromRole="Mangas" ToRole="Caps" />
+        </EntityType>
+        <Association Name="FK_Caps_Mangas">
+          <End Role="Mangas" Type="Self.Mangas" Multiplicity="1" />
+          <End Role="Caps" Type="Self.Caps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mangas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Caps">
+              <PropertyRef Name="ID_Manga" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MangasDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Caps" EntityType="Self.Caps" />
+          <EntitySet Name="Mangas" EntityType="Self.Mangas" />
+          <AssociationSet Name="FK_Caps_Mangas" Association="Self.FK_Caps_Mangas">
+            <End Role="Mangas" EntitySet="Mangas" />
+            <End Role="Caps" EntitySet="Caps" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MangasDBModelStoreContainer" CdmEntityContainer="MangasDBEntities">
+          <EntitySetMapping Name="Caps">
+            <EntityTypeMapping TypeName="MangasDBModel.Caps">
+              <MappingFragment StoreEntitySet="Caps">
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Manga" ColumnName="ID_Manga" />
+                <ScalarProperty Name="NumberCap" ColumnName="NumberCap" />
+                <ScalarProperty Name="SendToKindle" ColumnName="SendToKindle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mangas">
+            <EntityTypeMapping TypeName="MangasDBModel.Mangas">
+              <MappingFragment StoreEntitySet="Mangas">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NameManga" ColumnName="NameManga" />
+                <ScalarProperty Name="NumberCaps" ColumnName="NumberCaps" />
+                <ScalarProperty Name="DateLastUpdate" ColumnName="DateLastUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

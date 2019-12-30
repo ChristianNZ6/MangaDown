@@ -1,34 +1,32 @@
 ﻿using HtmlAgilityPack;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Microsoft.Win32.SafeHandles;
 using Nancy.Json;
 using Newtonsoft.Json;
 using ScrapySharp.Extensions;
 using ScrapySharp.Network;
-using Spire.Pdf;
-using Spire.Pdf.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace WebScrap_Union
+namespace WebScrap_Union_single
 {
-    public class Program
+    class Program
     {
         static void Main(string[] args)
         {
-            return;
+            Console.WriteLine("Hello World!");
+
+            DownMangaSingle("");
+
+
         }
 
-        public static void DownManga(string nameManga)
+        public static void DownMangaSingle(string nameManga)
         {
+
+           nameManga = "spy x family"; 
 
             var browser = new ScrapingBrowser();
 
@@ -45,6 +43,8 @@ namespace WebScrap_Union
             var url = instance[0].url;
 
             var namemaga = instance[0].titulo;
+
+
 
             var capsPage = browser.NavigateToPage(new Uri("https://unionleitor.top/manga/" + url), HttpVerb.Get);
 
@@ -73,7 +73,25 @@ namespace WebScrap_Union
             caps.Reverse();
 
 
-            var nameCapsAndcaps = nameCaps.Zip(caps, (nc, c) => new { nameCaps = nc, caps = c });
+            var nameCapsAndcaps = nameCaps.Zip(caps, (nc, c) => new { nameCaps = nc, caps = c })/*.Where( x => x.nameCaps == "Cap. 07")*/;
+
+            DBModel.MangasDBEntities mangasDBEntities = new DBModel.MangasDBEntities();
+
+            DBModel.Mangas mangasModel = new DBModel.Mangas();
+            DBModel.Caps capsModel = new DBModel.Caps();
+
+            mangasModel.NameManga = namemaga;
+            mangasModel.NumberCaps = caps.Count().ToString();
+
+            //mangasModel.DateLastUpdate = DateTime.Now;
+
+            mangasDBEntities.Mangas.Add(mangasModel);
+
+            mangasDBEntities.SaveChanges();
+
+
+
+
 
             foreach (var cap in nameCapsAndcaps)
             {
@@ -83,67 +101,75 @@ namespace WebScrap_Union
                 hdoc.LoadHtml(pagesPage.Html.InnerHtml);
                 string pagesXpath = "//*[@id='leitor']/div[4]/div[4]/img";
 
-                try
-                {
-                    pages = hdoc.DocumentNode.SelectNodes(pagesXpath).ToArray().Select(node => node.GetAttributeValue("src")).ToList();
+                capsModel.NumberCap = cap.nameCaps;
+                //capsModel.SendToKindle = false;
+                capsModel.ID_Manga = mangasDBEntities.Mangas.Where(z => z.NameManga == namemaga).Select(x => x.ID).FirstOrDefault();
+                capsModel.LastUpdate = DateTime.Now;
 
-                    pages.RemoveAll(u => u.Contains("banner"));
-
-                }
-                catch (Exception)
-                {
-                    return;
-
-                }
-
-                List<Byte[]> listbyte = new List<byte[]>();
-                byte[] bytes = { };
-                foreach (var page in pages)
-                {
+                mangasDBEntities.SaveChanges();
 
 
-                    bytes = GetImg(page);
+                //try
+                //{
+                //    pages = hdoc.DocumentNode.SelectNodes(pagesXpath).ToArray().Select(node => node.GetAttributeValue("src")).ToList();
 
-                    //var base64 = Convert.ToBase64String(bytes);
+                //    pages.RemoveAll(u => u.Contains("banner"));
 
-                    listbyte.Add(bytes);
+                //}
+                //catch (Exception)
+                //{
+                //    return;
+
+                //}
+
+                //List<Byte[]> listbyte = new List<byte[]>();
+                //byte[] bytes = { };
+                //foreach (var page in pages)
+                //{
 
 
-                }
+                //    bytes = GetImg(page);
+
+                //    //var base64 = Convert.ToBase64String(bytes);
+
+                //    listbyte.Add(bytes);
 
 
-
-                MemoryStream ms = ToPDF(listbyte);
-                Spire.Pdf.PdfDocument doc = new Spire.Pdf.PdfDocument();
-                doc.LoadFromStream(ms);
-
-                doc.PageScaling = PdfPrintPageScaling.ShrinkOversized;
-
-
+                //}
 
 
 
+                //MemoryStream ms = ToPDF(listbyte);
+                //Spire.Pdf.PdfDocument doc = new Spire.Pdf.PdfDocument();
+                //doc.LoadFromStream(ms);
+
+                //doc.PageScaling = PdfPrintPageScaling.ShrinkOversized;
 
 
-                var pathFile = "C:\\1\\" + namemaga + " " + cap.nameCaps + ".pdf";
-                var fileName = namemaga + " " + cap.nameCaps;
-                
-                doc.SaveToFile(pathFile);
 
 
 
-                //FileStream fileStream = new FileStream("C:\\1\\" + namemaga + " " + cap.nameCaps + ".pdf", FileMode.Open, FileAccess.Read);
 
-                try
-                {
-                    EmailEnvio.Program.SendEmaail(pathFile, fileName);
 
-                }
-                catch (Exception)
-                {
-                    continue;
+                //var pathFile = "C:\\1\\" + namemaga + " " + cap.nameCaps + ".pdf";
+                //var fileName = namemaga + " " + cap.nameCaps;
 
-                }
+                //doc.SaveToFile(pathFile);
+
+
+
+                ////FileStream fileStream = new FileStream("C:\\1\\" + namemaga + " " + cap.nameCaps + ".pdf", FileMode.Open, FileAccess.Read);
+
+                //try
+                //{
+                //    EmailEnvio.Program.SendEmaail(pathFile, fileName);
+
+                //}
+                //catch (Exception)
+                //{
+                //    continue;
+
+                //}
 
 
                 //MemoryStream.CopyTo(fileStream);
@@ -277,7 +303,5 @@ namespace WebScrap_Union
                 return x.CompareTo(y);
             }
         }
-
-
     }
 }

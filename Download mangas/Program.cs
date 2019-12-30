@@ -34,7 +34,7 @@ namespace Download_mangas
             MyMangasEntities mangasEntities = new MyMangasEntities();
 
 
-
+            //mangasEntities.
 
 
             bool newgen = false;
