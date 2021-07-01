@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CA19CC65-F40E-48B3-AE73-0CBA29C95D1B}</ProjectGuid>
+    <ProjectGuid>{C59A243E-59A3-48BA-9C07-3BCBCD645BFA}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EmailEnvio</RootNamespace>
-    <AssemblyName>EmailEnvio</AssemblyName>
+    <RootNamespace>TiffMerge</RootNamespace>
+    <AssemblyName>TiffMerge</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,12 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiveUp.Net.Imap4">
-      <HintPath>..\..\MailSystem.NET-master\Class Library\Bin\Debug\ActiveUp.Net.Imap4.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Messaging" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TiffHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

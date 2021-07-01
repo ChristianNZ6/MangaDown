@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CA19CC65-F40E-48B3-AE73-0CBA29C95D1B}</ProjectGuid>
+    <ProjectGuid>{C3F40B31-13F0-4757-94A6-808C21E62A81}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EmailEnvio</RootNamespace>
-    <AssemblyName>EmailEnvio</AssemblyName>
+    <RootNamespace>GetFunctions</RootNamespace>
+    <AssemblyName>GetFunctions</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,12 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiveUp.Net.Imap4">
-      <HintPath>..\..\MailSystem.NET-master\Class Library\Bin\Debug\ActiveUp.Net.Imap4.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Messaging" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
